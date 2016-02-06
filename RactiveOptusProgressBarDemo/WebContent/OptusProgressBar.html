@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Optus Progess Bar Demo</title>
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+  <script src='http://cdn.ractivejs.org/latest/ractive.min.js'></script>
+
+  <style type="text/css">
+    .progress {
+      position: relative;
+      width: 400px;
+      height: 40px;
+    }
+    
+    .progress-bar {
+      background: #87CEEB;
+    }
+    
+    .progress span {
+      position: absolute;
+      display: block;
+      width: 100%;
+      color: black;
+      font-weight: bold;
+      line-height: 40px;
+    }
+    
+    .buttonContainer {
+      align="left";
+    }
+    
+    .limitExceed {
+      height: inherit;
+      background-color: red;
+    }
+  </style>
+
+</head>
+
+<body>
+  <div id="progressBarContainer"></div>
+  <script id="ractiveprogressBar" type="text/ractive">
+    <div class="container">
+
+      <h3>Optus Progress Bar Demo</h3>
+      <div class="progress">
+        <div id="firstProgressBar" class="progress-bar {{ firstProgressBarInitialWidth >100 ? " limitExceed " : " " }} " role="progressbar" aria-valuenow="{{firstProgressBarInitialWidth}}" aria-valuemin="0" aria-valuemax="100" style="width:{{firstProgressBarInitialWidth}}%">
+          <span> {{firstProgressBarInitialWidth}}%</span>
+        </div>
+      </div>
+
+      <div class="progress">
+        <div id="secondProgressBar" align="center" class="progress-bar  {{ secondProgressBarInitialWidth>100 ? " limitExceed " : " " }} " role="progressbar" aria-valuenow="{{secondProgressBarInitialWidth}}" aria-valuemin="0" aria-valuemax="100" style="width:{{secondProgressBarInitialWidth}}%">
+          <span> {{secondProgressBarInitialWidth}}%</span>
+        </div>
+      </div>
+
+      <div class="progress">
+        <div id="thirdProgressBarInitialWidth" class="progress-bar {{ thirdProgressBarInitialWidth>100 ? " limitExceed " : " " }} " role="progressbar" aria-valuenow="{{thirdProgressBarInitialWidth}}" aria-valuemin="0" aria-valuemax="100" style="width:{{thirdProgressBarInitialWidth}}%">
+          <span> {{thirdProgressBarInitialWidth}}%</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div>
+        <div class="buttonContainer">
+          <select id="drpSelect" onchange='progressbar.set({selectedBar:this.value})'>
+            <option value="firstProgressBarInitialWidth">#progress 1</option>
+            <option value="secondProgressBarInitialWidth">#progress 2</option>
+            <option value="thirdProgressBarInitialWidth">#progress 3</option>
+          </select>
+
+          <button on-click="progress:{{'+25'}}">-25</button>
+          <button on-click="progress:{{'+10'}}">-10</button>
+          <button on-click="progress:{{'-10'}}">+10</button>
+          <button on-click="progress:{{'-25'}}">+25</button>
+        </div>
+      </div>
+    </div>
+
+  </script>
+  <script>
+    var progressbar = new Ractive({
+      el: '#progressBarContainer',
+      template: "#ractiveprogressBar",
+      data: {
+        selectedBar: 'firstProgressBarInitialWidth',
+        firstProgressBarInitialWidth: '25',
+        secondProgressBarInitialWidth: '50',
+        thirdProgressBarInitialWidth: '75',
+        firstProgressBarFinalWidth: '25',
+        secondProgressBarFinalWidth: '50',
+        thirdProgressBarFinalWidth: '75'
+      }
+    });
+
+    progressbar.on('progress', function(e, changedWidth) {
+      var finalWidth;
+      var initialWidth = progressbar.get('selectedBar');
+      if (initialWidth == "firstProgressBarInitialWidth") {
+        finalWidth = "firstProgressBarFinalWidth";
+      } else if (initialWidth == "secondProgressBarInitialWidth") {
+        finalWidth = "secondProgressBarFinalWidth";
+      } else if (initialWidth == "thirdProgressBarInitialWidth") {
+        finalWidth = "thirdProgressBarFinalWidth";
+      }
+      progressbar.set(finalWidth, progressbar.get(initialWidth));
+      if ((progressbar.get(initialWidth) - changedWidth) < 0)
+        progressbar.set(initialWidth, progressbar.get(finalWidth));
+      else
+        progressbar.set(initialWidth, progressbar.get(initialWidth) - changedWidth);
+    });
+  </script>
+</body>
+
+</html>
