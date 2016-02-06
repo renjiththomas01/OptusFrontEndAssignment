@@ -7,6 +7,7 @@
   <script src='http://cdn.ractivejs.org/latest/ractive.min.js'></script>
 
   <style type="text/css">
+    /* Set the styles for progress bars */
     .progress {
       position: relative;
       width: 400px;
@@ -16,7 +17,7 @@
     .progress-bar {
       background: #87CEEB;
     }
-    
+    /* Sets the span details for the progress bars */
     .progress span {
       position: absolute;
       display: block;
@@ -25,24 +26,21 @@
       font-weight: bold;
       line-height: 40px;
     }
-    
+    /* Aligns buttons to the left side */
     .buttonContainer {
       align="left";
     }
-    
+    /* Set the color as red, if the color exceeds */
     .limitExceed {
       height: inherit;
       background-color: red;
     }
   </style>
-
 </head>
-
 <body>
   <div id="progressBarContainer"></div>
   <script id="ractiveprogressBar" type="text/ractive">
-    <div class="container">
-
+    <div class="container">		
       <h3>Optus Progress Bar Demo</h3>
       <div class="progress">
         <div id="firstProgressBar" class="progress-bar {{ firstProgressBarInitialWidth >100 ? " limitExceed " : " " }} " role="progressbar" aria-valuenow="{{firstProgressBarInitialWidth}}" aria-valuemin="0" aria-valuemax="100" style="width:{{firstProgressBarInitialWidth}}%">
@@ -82,6 +80,7 @@
 
   </script>
   <script>
+  /* Create new Ractive object and assign the default values to it */
     var progressbar = new Ractive({
       el: '#progressBarContainer',
       template: "#ractiveprogressBar",
@@ -95,9 +94,10 @@
         thirdProgressBarFinalWidth: '75'
       }
     });
-
+	/* Function handles the logic to identify calculated width based on the selected value.  */
     progressbar.on('progress', function(e, changedWidth) {
       var finalWidth;
+      /* Identify the initial width from the selected bar */
       var initialWidth = progressbar.get('selectedBar');
       if (initialWidth == "firstProgressBarInitialWidth") {
         finalWidth = "firstProgressBarFinalWidth";
@@ -106,10 +106,15 @@
       } else if (initialWidth == "thirdProgressBarInitialWidth") {
         finalWidth = "thirdProgressBarFinalWidth";
       }
+      //Sets the final width and initial width on Ractive object
       progressbar.set(finalWidth, progressbar.get(initialWidth));
       if ((progressbar.get(initialWidth) - changedWidth) < 0)
+    	  /* If the calculated change of width is less than zero, then directly 
+    	  set the Ractive object with initial and final values */
         progressbar.set(initialWidth, progressbar.get(finalWidth));
       else
+    	  /* If the calculated width is greater than zero, set the final width as 
+    	  the difference between initial and chnaged width */
         progressbar.set(initialWidth, progressbar.get(initialWidth) - changedWidth);
     });
   </script>
