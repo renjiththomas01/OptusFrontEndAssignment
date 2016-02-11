@@ -1,0 +1,29 @@
+
+    /* Set the styles for progress bars */
+    .progress {
+      position: relative;
+      width: 400px;
+      height: 40px;
+    }
+    
+    .progress-bar {
+      background: #87CEEB;
+    }
+    /* Sets the span details for the progress bars */
+    .progress span {
+      position: absolute;
+      display: block;
+      width: 100%;
+      color: black;
+      font-weight: bold;
+      line-height: 40px;
+    }
+    /* Aligns buttons to the left side */
+    .buttonContainer {
+      align="left";
+    }
+    /* Set the color as red, if the color exceeds */
+    .limitExceed {
+      height: inherit;
+      background-color: red;
+    }
